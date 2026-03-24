@@ -107,6 +107,12 @@ struct SystemKeychain: KeychainStorage {
       kSecAttrAccount as String: key,
     ]
 
+    #if os(macOS)
+    // Use the iOS-style data protection keychain on macOS to avoid repeated
+    // password prompts caused by the legacy file-based keychain's ACL system.
+    query[kSecUseDataProtectionKeychain as String] = true
+    #endif
+
     if let accessGroup {
       query[kSecAttrAccessGroup as String] = accessGroup
     }
